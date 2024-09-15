@@ -1,7 +1,5 @@
 import streamlit as st
 
-import time
-
 from streamlit_chat import message
 from streamlit_mic_recorder import speech_to_text
 # from chatbot import gen_chatbot_response
@@ -10,7 +8,7 @@ import random
 
 client = InferenceClient(
     "microsoft/Phi-3-mini-4k-instruct",
-    token="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",
+    token=st.secrets["REQ_TOKEN"]
 )
 def gen_chatbot_response(messages: list):
     arr_err = ["Phi không hiểu ý của bạn", 
@@ -70,8 +68,6 @@ with input_container:
         st.session_state.speech_text_output = text
     with c1:
         input_text = st.text_input("You: ", value=st.session_state.speech_text_output, key="input", on_change=submit, label_visibility= "collapsed")
-        with st.spinner(text="Đang chạy..."):
-            time.sleep(2)
     user_input = st.session_state.input_text
     if user_input:
         st.session_state.past.append(user_input)
@@ -79,7 +75,8 @@ with input_container:
             "role": "user", 
             "content": user_input
         })
-        response = gen_chatbot_response(st.session_state.messages)
+        with st.spinner(text="Đang chạy..."):
+            response = gen_chatbot_response(st.session_state.messages)
         st.session_state.generated.append(response)
         st.session_state.messages.append({
             "role": "system",
