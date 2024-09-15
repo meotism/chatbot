@@ -1,14 +1,17 @@
 import streamlit as st
 
+import time
+
 from streamlit_chat import message
 from streamlit_mic_recorder import speech_to_text
 # from chatbot import gen_chatbot_response
 from huggingface_hub import InferenceClient
 import random
 import token_temp
+
 client = InferenceClient(
     "microsoft/Phi-3-mini-4k-instruct",
-    token=token_temp.TOKEN
+    token=token_temp.TOKEN,
 )
 def gen_chatbot_response(messages: list):
     arr_err = ["Phi không hiểu ý của bạn", 
@@ -54,20 +57,18 @@ def submit():
     st.session_state.input_text = st.session_state.input
     st.session_state.input = ""
 
-# ## Applying the user input box
-
 with input_container:
     c1, c2 = st.columns([9,1])
     if "input_text" not in st.session_state:
         st.session_state.input_text = ""
-    if 'speech_text_output' not in st.session_state:
-        st.session_state.speech_text_output = ""
+    if 'input' not in st.session_state:
+        st.session_state.input = ""
     with c2:
         text = speech_to_text(language='vi', start_prompt="⏺️", stop_prompt="⏹️", key="STT", use_container_width=True, just_once=True)
     if text:
-        st.session_state.speech_text_output = text
+        st.session_state.input = text
     with c1:
-        input_text = st.text_input("You: ", value=st.session_state.speech_text_output, key="input", on_change=submit, label_visibility= "collapsed")
+        input_text = st.text_input("You: ", value="", key="input", on_change=submit, label_visibility= "collapsed")
     user_input = st.session_state.input_text
     if user_input:
         st.session_state.past.append(user_input)
@@ -75,15 +76,17 @@ with input_container:
             "role": "user", 
             "content": user_input
         })
-        with st.spinner(text="Đang chạy..."):
+        with st.spinner(text="Đang trả lời..."):
             response = gen_chatbot_response(st.session_state.messages)
         st.session_state.generated.append(response)
         st.session_state.messages.append({
             "role": "system",
             "content": response
         })
+        st.session_state.input_text = None
         st.toast("Tuyệt vời, bạn đánh giá bot được mấy điểm nào?", icon='😍')
         
+# Applying the user input box
 with response_container:
     if st.session_state['generated']:
         for i in range(len(st.session_state['generated'])):
