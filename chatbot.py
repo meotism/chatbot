@@ -70,8 +70,6 @@ with input_container:
         st.session_state.speech_text_output = text
     with c1:
         input_text = st.text_input("You: ", value=st.session_state.speech_text_output, key="input", on_change=submit, label_visibility= "collapsed")
-        with st.spinner(text="Đang chạy..."):
-            time.sleep(2)
     user_input = st.session_state.input_text
     if user_input:
         st.session_state.past.append(user_input)
@@ -79,12 +77,13 @@ with input_container:
             "role": "user", 
             "content": user_input
         })
-        response = gen_chatbot_response(st.session_state.messages)
-        st.session_state.generated.append(response)
-        st.session_state.messages.append({
-            "role": "system",
-            "content": response
-        })
+        with st.spinner(text="Đang chạy..."):
+            response = gen_chatbot_response(st.session_state.messages)
+            st.session_state.generated.append(response)
+            st.session_state.messages.append({
+                "role": "system",
+                "content": response
+            })
         st.toast("Tuyệt vời, bạn đánh giá bot được mấy điểm nào?", icon='😍')
         
 with response_container:

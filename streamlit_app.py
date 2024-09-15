@@ -5,10 +5,10 @@ from streamlit_mic_recorder import speech_to_text
 # from chatbot import gen_chatbot_response
 from huggingface_hub import InferenceClient
 import random
-
+import token_temp
 client = InferenceClient(
     "microsoft/Phi-3-mini-4k-instruct",
-    token=st.secrets["REQ_TOKEN"]
+    token=token_temp.TOKEN
 )
 def gen_chatbot_response(messages: list):
     arr_err = ["Phi không hiểu ý của bạn", 
