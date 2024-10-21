@@ -51,6 +51,15 @@ if 'generated' not in st.session_state:
 response_container = st.container()
 input_container = st.container()
 
+linkedin_url = "https://www.linkedin.com/in/meotism/" 
+linkedin_icon_url = "https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedIn_Logo.svg"
+
+# Display the LinkedIn icon
+st.markdown(
+    f'<a href="{linkedin_url}" target="_blank"><img src="{linkedin_icon_url}" width="50" height="50" /></a>',
+    unsafe_allow_html=True
+)
+
 # Function for taking user-provided prompt as input
 
 def submit():
