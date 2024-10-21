@@ -56,7 +56,7 @@ linkedin_icon_url = "https://upload.wikimedia.org/wikipedia/commons/0/01/LinkedI
 
 # Display the LinkedIn icon
 st.markdown(
-    f'<a href="{linkedin_url}" target="_blank"><img src="{linkedin_icon_url}" width="50" height="50" /></a>',
+    f'<a href="{linkedin_url}" target="_blank"><img src="{linkedin_icon_url}" /></a>',
     unsafe_allow_html=True
 )
 
