@@ -76,7 +76,7 @@ with input_container:
         text = speech_to_text(language='vi', start_prompt="⏺️", stop_prompt="⏹️", key="STT", use_container_width=True, just_once=True)
     if text:
         # st.session_state.input = text
-        st.session_state.input_text = text
+        user_input = text
     with c1:
         input_text = st.text_input("You: ", value="", key="input", on_change=submit, label_visibility= "collapsed")
     user_input = st.session_state.input_text
