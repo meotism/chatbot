@@ -29,6 +29,25 @@ def gen_chatbot_response(messages: list):
         text = result.choices[0].message.content
     return text
 
+def flow_response(user_input):
+    if not user_input:
+        return
+    else:
+        st.session_state.past.append(user_input)
+        st.session_state.messages.append({
+            "role": "user", 
+            "content": user_input
+        })
+        with st.spinner(text="Đang trả lời..."):
+            response = gen_chatbot_response(st.session_state.messages)
+        st.session_state.generated.append(response)
+        st.session_state.messages.append({
+            "role": "system",
+            "content": response
+        })
+        st.session_state.input_text = None
+        st.toast("Tuyệt vời, bạn đánh giá bot được mấy điểm nào?", icon='😍')
+        return
 # List messages history
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -77,24 +96,26 @@ with input_container:
     if text:
         # st.session_state.input = text
         user_input = text
+        flow_response(user_input)
     with c1:
         input_text = st.text_input("You: ", value="", key="input", on_change=submit, label_visibility= "collapsed")
         user_input = st.session_state.input_text
     if user_input:
-        st.session_state.past.append(user_input)
-        st.session_state.messages.append({
-            "role": "user", 
-            "content": user_input
-        })
-        with st.spinner(text="Đang trả lời..."):
-            response = gen_chatbot_response(st.session_state.messages)
-        st.session_state.generated.append(response)
-        st.session_state.messages.append({
-            "role": "system",
-            "content": response
-        })
-        st.session_state.input_text = None
-        st.toast("Tuyệt vời, bạn đánh giá bot được mấy điểm nào?", icon='😍')
+        flow_response(user_input)
+        # st.session_state.past.append(user_input)
+        # st.session_state.messages.append({
+        #     "role": "user", 
+        #     "content": user_input
+        # })
+        # with st.spinner(text="Đang trả lời..."):
+        #     response = gen_chatbot_response(st.session_state.messages)
+        # st.session_state.generated.append(response)
+        # st.session_state.messages.append({
+        #     "role": "system",
+        #     "content": response
+        # })
+        # st.session_state.input_text = None
+        # st.toast("Tuyệt vời, bạn đánh giá bot được mấy điểm nào?", icon='😍')
         
 # Applying the user input box
 with response_container:
