@@ -79,7 +79,7 @@ with input_container:
         user_input = text
     with c1:
         input_text = st.text_input("You: ", value="", key="input", on_change=submit, label_visibility= "collapsed")
-    user_input = st.session_state.input_text
+        user_input = st.session_state.input_text
     if user_input:
         st.session_state.past.append(user_input)
         st.session_state.messages.append({
