@@ -38,6 +38,7 @@ def flow_response(user_input):
             "role": "user", 
             "content": user_input
         })
+        message(user_input, is_user=True, key=str(len(st.session_state['generated'])) + '_user')
         with st.spinner(text="Đang trả lời..."):
             response = gen_chatbot_response(st.session_state.messages)
         st.session_state.generated.append(response)
