@@ -38,7 +38,6 @@ def flow_response(user_input):
             "role": "user", 
             "content": user_input
         })
-        message(user_input, is_user=True, key=str(len(st.session_state['generated'])) + '_user')
         with st.spinner(text="Đang trả lời..."):
             response = gen_chatbot_response(st.session_state.messages)
         st.session_state.generated.append(response)
@@ -96,7 +95,8 @@ with input_container:
         text = speech_to_text(language='vi', start_prompt="⏺️", stop_prompt="⏹️", key="STT", use_container_width=True, just_once=True)
     if text:
         # st.session_state.input = text
-        st.session_state.input_text = text
+        user_input = text
+        flow_response(user_input)
     with c1:
         input_text = st.text_input("You: ", value="", key="input", on_change=submit, label_visibility= "collapsed")
         user_input = st.session_state.input_text
